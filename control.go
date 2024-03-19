@@ -13,7 +13,7 @@ type FloodControlImpl struct {
 
 type AttemptsStorage interface {
 	GetAttemptsCount(ctx context.Context, userID int64, period time.Duration) (int, error)
-	RegisterAttempt(ctx context.Context, userID int64, time time.Time) error
+	RegisterAttempt(ctx context.Context, userID int64, timestamp time.Time) error
 }
 
 func (c *FloodControlImpl) Check(ctx context.Context, userID int64) (bool, error) {
@@ -24,7 +24,7 @@ func (c *FloodControlImpl) Check(ctx context.Context, userID int64) (bool, error
 	if attempts >= c.allowedAttempts {
 		return false, nil
 	}
-	// grant access
+	// grant access.
 	err = c.storage.RegisterAttempt(ctx, userID, time.Now())
 	if err != nil {
 		return false, err
