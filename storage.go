@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"sync"
 	"time"
 )
@@ -18,7 +19,7 @@ func NewAttemptsMemoryStorage() *AttemptsMemoryStorage {
 	}
 }
 
-func (s *AttemptsMemoryStorage) GetAttemptsCount(userID int64, period time.Duration) (int, error) {
+func (s *AttemptsMemoryStorage) GetAttemptsCount(ctx context.Context, userID int64, period time.Duration) (int, error) {
 	// RLock is used because we are reading the map.
 	s.lock.RLock()
 	defer s.lock.RUnlock()
