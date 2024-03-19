@@ -11,6 +11,20 @@ type FloodControlImpl struct {
 	storage         AttemptsStorage
 }
 
+type FloodControlOptions struct {
+	AllowedPeriod   time.Duration
+	AllowedAttempts int
+	Storage         AttemptsStorage
+}
+
+func NewFloodControl(opts FloodControlOptions) *FloodControlImpl {
+	return &FloodControlImpl{
+		allowedPeriod:   opts.AllowedPeriod,
+		allowedAttempts: opts.AllowedAttempts,
+		storage:         opts.Storage,
+	}
+}
+
 type AttemptsStorage interface {
 	GetAttemptsCount(ctx context.Context, userID int64, period time.Duration) (int, error)
 	RegisterAttempt(ctx context.Context, userID int64, timestamp time.Time) error

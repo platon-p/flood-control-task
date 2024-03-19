@@ -10,6 +10,14 @@ type AttemptsMemoryStorage struct {
 	lock     sync.RWMutex
 }
 
+func NewAttemptsMemoryStorage() *AttemptsMemoryStorage {
+	attempts := make(map[int64][]time.Time)
+	return &AttemptsMemoryStorage{
+		attempts: attempts,
+		lock:     sync.RWMutex{},
+	}
+}
+
 func (s *AttemptsMemoryStorage) GetAttemptsCount(userID int64, period time.Duration) (int, error) {
 	// RLock is used because we are reading the map.
 	s.lock.RLock()
