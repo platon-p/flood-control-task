@@ -2,6 +2,7 @@ package control
 
 import (
 	"context"
+	"log"
 	"testing"
 )
 
@@ -27,7 +28,7 @@ func (s *BlackListStorageMock) Add(userID int64) error {
 
 func TestBlackListControl(t *testing.T) {
 	storage := NewBlackListStorageMock()
-	control := NewBlackListControl(storage)
+	control := NewBlackListControl(storage, log.Default())
 
 	userID := int64(1)
 

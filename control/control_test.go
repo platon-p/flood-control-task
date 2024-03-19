@@ -2,6 +2,7 @@ package control
 
 import (
 	"context"
+	"log"
 	"testing"
 	"time"
 )
@@ -38,6 +39,7 @@ func TestFloodControl_Check(t *testing.T) {
 		AllowedPeriod:   time.Minute,
 		AllowedAttempts: 2,
 		Storage:         storage,
+		Logger:          log.Default(),
 	})
 
 	// New user should be allowed.

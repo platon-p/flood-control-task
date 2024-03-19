@@ -2,6 +2,7 @@ package control
 
 import (
 	"context"
+	"log"
 	"time"
 )
 
@@ -9,12 +10,14 @@ type FloodControlImpl struct {
 	allowedPeriod   time.Duration
 	allowedAttempts int
 	storage         AttemptsStorage
+	logger          *log.Logger
 }
 
 type FloodControlOptions struct {
 	AllowedPeriod   time.Duration
 	AllowedAttempts int
 	Storage         AttemptsStorage
+	Logger          *log.Logger
 }
 
 func NewFloodControl(opts FloodControlOptions) *FloodControlImpl {
@@ -22,6 +25,7 @@ func NewFloodControl(opts FloodControlOptions) *FloodControlImpl {
 		allowedPeriod:   opts.AllowedPeriod,
 		allowedAttempts: opts.AllowedAttempts,
 		storage:         opts.Storage,
+		logger:          opts.Logger,
 	}
 }
 
@@ -36,6 +40,7 @@ func (c *FloodControlImpl) Check(ctx context.Context, userID int64) (bool, error
 		return false, err
 	}
 	if attempts >= c.allowedAttempts {
+		c.logger.Printf("user %d exceeded the allowed number of attempts", userID)
 		return false, nil
 	}
 	// grant access.
@@ -43,5 +48,6 @@ func (c *FloodControlImpl) Check(ctx context.Context, userID int64) (bool, error
 	if err != nil {
 		return false, err
 	}
+	c.logger.Printf("user %d granted access", userID)
 	return true, nil
 }
