@@ -37,7 +37,7 @@ func (s *AttemptsMemoryStorage) GetAttemptsCount(ctx context.Context, userID int
 	return count, nil
 }
 
-func (s *AttemptsMemoryStorage) RegisterAttempt(userID int64, timestamp time.Time) error {
+func (s *AttemptsMemoryStorage) RegisterAttempt(ctx context.Context, userID int64, timestamp time.Time) error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	attempts, ok := s.attempts[userID]
